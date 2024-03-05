@@ -1,14 +1,14 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: root
-    url: jdbc:postgresql://localhost:5432/connect4
-    jpa:
+    username: utlecjha
+    password: 4OgGNCpG0QnKQ84symgwHzTbcqbUFUnv
+    url: jdbc:postgresql://flora.db.elephantsql.com:5432/utlecjha
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
       hibernate:
-        ddl-auto: update
-      properties:
-        hibernate:
-          dealect: org.hibernate.dealect.PostgreSQLDialect
-          format_sql: 'true'
-      show-sql: 'true'
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: 'true'
+    show-sql: 'true'
