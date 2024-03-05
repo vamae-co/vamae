@@ -1,3 +1,6 @@
+application:
+  title: vamae
+  version: 0.0.0
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
