@@ -1,4 +1,4 @@
-package com.vamae.entity;
+package com.vamae.connect4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

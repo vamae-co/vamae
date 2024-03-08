@@ -1,7 +1,7 @@
-package com.vamae.service;
+package com.vamae.connect4.repository.service;
 
-import com.vamae.entity.Connect4Game;
-import com.vamae.repository.Connect4GameRepository;
+import com.vamae.connect4.entity.Connect4Game;
+import com.vamae.connect4.repository.Connect4GameRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.vamae.controller.Connect4;

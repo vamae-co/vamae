@@ -1,6 +1,6 @@
-package com.vamae.repository;
+package com.vamae.connect4.repository;
 
-import com.vamae.entity.Connect4Game;
+import com.vamae.connect4.entity.Connect4Game;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

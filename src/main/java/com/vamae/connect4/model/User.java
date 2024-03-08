@@ -1,4 +1,4 @@
-package com.vamae.model;
+package com.vamae.connect4.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
