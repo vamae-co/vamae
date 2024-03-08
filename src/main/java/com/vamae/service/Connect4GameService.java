@@ -23,7 +23,6 @@ public class Connect4GameService {
                 .game(game)
                 .currentPlayer(Piece.PLAYER_1)
                 .build();
-        System.out.println("GAME INITIALIZATION");
         return connect4GameRepository.save(connect4Game);
     }
 
@@ -31,12 +30,12 @@ public class Connect4GameService {
         Connect4Game currentGame = connect4GameRepository.findById(gameId).get();
         Connect4 currentGameObject = currentGame.getGame();
 
+        currentGameObject.move(x, currentGame.getCurrentPlayer());
+
         if(currentGame.getCurrentPlayer() == Piece.PLAYER_1) {
-            currentGameObject.move(x, currentGame.getCurrentPlayer());
             currentGame.setCurrentPlayer(Piece.PLAYER_2);
         }
         else {
-            currentGameObject.move(x, currentGame.getCurrentPlayer());
             currentGame.setCurrentPlayer(Piece.PLAYER_1);
         }
 

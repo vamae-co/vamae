@@ -19,7 +19,6 @@ public class Connect4GameController {
             @RequestParam Long secondPlayerId,
             @RequestParam Double betSum
     ) {
-        System.out.println("CONTROLLER GAME INITIALIZATION");
         return connect4GameService.init(columns, rows, firstPlayerId, secondPlayerId, betSum);
     }
 }
