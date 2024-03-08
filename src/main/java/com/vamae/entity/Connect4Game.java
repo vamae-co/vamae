@@ -1,14 +1,12 @@
 package com.vamae.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.vamae.controller.Connect4;
 import org.vamae.enums.Piece;
 
-@Entity
+@Document
 @Getter
 @Builder
 @AllArgsConstructor
@@ -16,10 +14,12 @@ import org.vamae.enums.Piece;
 public class Connect4Game {
     @Id
     @GeneratedValue
-    private Long id;
+    private String id;
     private Long firstPlayerId;
     private Long secondPlayerId;
-    private int betSum;
-    private GameBoard game;
+    private Double betSum;
+    @Setter
+    private Connect4 game;
+    @Setter
     private Piece currentPlayer;
 }
