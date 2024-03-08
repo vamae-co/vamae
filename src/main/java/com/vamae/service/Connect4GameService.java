@@ -3,7 +3,6 @@ package com.vamae.service;
 import com.vamae.entity.Connect4Game;
 import com.vamae.repository.Connect4GameRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vamae.controller.Connect4;
 import org.vamae.controller.GameBoardController;
