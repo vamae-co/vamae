@@ -1,6 +1,6 @@
 package com.vamae.connect4.controller;
 
-import com.vamae.connect4.repository.service.Connect4GameService;
+import com.vamae.connect4.service.Connect4GameService;
 import com.vamae.connect4.entity.Connect4Game;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

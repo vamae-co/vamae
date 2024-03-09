@@ -1,4 +1,4 @@
-package com.vamae.connect4.model;
+package com.vamae.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +15,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
-    @NotEmpty(message = "Username is requiered")
+    @NotEmpty(message = "Username is required")
     private String username;
 }

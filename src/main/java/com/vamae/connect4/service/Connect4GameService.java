@@ -1,4 +1,4 @@
-package com.vamae.connect4.repository.service;
+package com.vamae.connect4.service;
 
 import com.vamae.connect4.entity.Connect4Game;
 import com.vamae.connect4.repository.Connect4GameRepository;
