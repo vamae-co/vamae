@@ -17,7 +17,7 @@ public class Connect4GameController {
             @RequestParam(required = false, defaultValue = "6") int rows,
             @RequestParam Long firstPlayerId,
             @RequestParam Long secondPlayerId,
-            @RequestParam Double betSum
+            @RequestParam int betSum
     ) {
         return connect4GameService.init(columns, rows, firstPlayerId, secondPlayerId, betSum);
     }
