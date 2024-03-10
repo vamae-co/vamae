@@ -12,7 +12,7 @@ import org.vamae.enums.Piece;
 @AllArgsConstructor
 @Service
 public class Connect4GameService {
-    Connect4GameRepository connect4GameRepository;
+    private final Connect4GameRepository connect4GameRepository;
 
     public Connect4Game init(int columns, int rows, Long firstPlayerId, Long secondPlayerId, int betSum) {
         Connect4 game = new Connect4(new GameBoardController(new GameBoard(columns, rows)));

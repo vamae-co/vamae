@@ -21,4 +21,19 @@ public class Connect4GameController {
     ) {
         return connect4GameService.init(columns, rows, firstPlayerId, secondPlayerId, betSum);
     }
+
+    @PostMapping("/move")
+    public Connect4Game move(
+            @RequestParam String gameId,
+            @RequestParam int x
+            ) {
+        return connect4GameService.move(gameId, x);
+    }
+
+    @DeleteMapping("/end")
+    public int endGame(
+            @RequestParam String gameId
+    ) {
+        return connect4GameService.endGame(gameId);
+    }
 }
