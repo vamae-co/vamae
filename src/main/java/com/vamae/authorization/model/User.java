@@ -1,4 +1,4 @@
-package com.vamae.model;
+package com.vamae.authorization.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
