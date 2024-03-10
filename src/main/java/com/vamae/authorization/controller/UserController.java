@@ -5,8 +5,6 @@ import com.vamae.authorization.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/account")
 public class UserController {
