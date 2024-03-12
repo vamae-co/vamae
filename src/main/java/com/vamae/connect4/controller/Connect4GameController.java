@@ -1,6 +1,6 @@
 package com.vamae.connect4.controller;
 
-import com.vamae.connect4.repository.service.Connect4GameService;
+import com.vamae.connect4.service.Connect4GameService;
 import com.vamae.connect4.entity.Connect4Game;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class Connect4GameController {
             @RequestParam(required = false, defaultValue = "6") int rows,
             @RequestParam Long firstPlayerId,
             @RequestParam Long secondPlayerId,
-            @RequestParam Double betSum
+            @RequestParam int betSum
     ) {
         return connect4GameService.init(columns, rows, firstPlayerId, secondPlayerId, betSum);
     }

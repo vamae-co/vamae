@@ -17,7 +17,7 @@ public class Connect4Game {
     private String id;
     private Long firstPlayerId;
     private Long secondPlayerId;
-    private Double betSum;
+    private int betSum;
     @Setter
     private Connect4 game;
     @Setter

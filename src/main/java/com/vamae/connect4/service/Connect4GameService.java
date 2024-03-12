@@ -1,4 +1,4 @@
-package com.vamae.connect4.repository.service;
+package com.vamae.connect4.service;
 
 import com.vamae.connect4.entity.Connect4Game;
 import com.vamae.connect4.repository.Connect4GameRepository;
@@ -14,7 +14,7 @@ import org.vamae.enums.Piece;
 public class Connect4GameService {
     Connect4GameRepository connect4GameRepository;
 
-    public Connect4Game init(int columns, int rows, Long firstPlayerId, Long secondPlayerId, Double betSum) {
+    public Connect4Game init(int columns, int rows, Long firstPlayerId, Long secondPlayerId, int betSum) {
         Connect4 game = new Connect4(new GameBoardController(new GameBoard(columns, rows)));
         Connect4Game connect4Game = Connect4Game.builder()
                 .firstPlayerId(firstPlayerId)
@@ -43,9 +43,9 @@ public class Connect4GameService {
         return connect4GameRepository.save(currentGame);
     }
 
-    public Double endGame(String gameId) {
+    public int endGame(String gameId) {
         Connect4Game currentGame = connect4GameRepository.findById(gameId).get();
-        Double winSum = currentGame.getBetSum();
+        int winSum = currentGame.getBetSum();
         connect4GameRepository.delete(currentGame);
         return winSum;
     }
