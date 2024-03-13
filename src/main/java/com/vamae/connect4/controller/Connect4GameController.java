@@ -9,17 +9,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/connect4")
 public class Connect4GameController {
+
     private final Connect4GameService connect4GameService;
 
-    @GetMapping
+    @GetMapping("/createGame")
     public Connect4Game initGame(
             @RequestParam(required = false, defaultValue = "7") int columns,
             @RequestParam(required = false, defaultValue = "6") int rows,
-            @RequestParam Long firstPlayerId,
-            @RequestParam Long secondPlayerId,
-            @RequestParam int betSum
+            @RequestParam String firstPlayerId,
+            @RequestParam String secondPlayerId,
+            @RequestParam int bet
     ) {
-        return connect4GameService.init(columns, rows, firstPlayerId, secondPlayerId, betSum);
+        return connect4GameService.init(columns, rows, firstPlayerId, secondPlayerId, bet);
     }
 
     @PostMapping("/move")
@@ -28,12 +29,5 @@ public class Connect4GameController {
             @RequestParam int x
             ) {
         return connect4GameService.move(gameId, x);
-    }
-
-    @DeleteMapping("/end")
-    public int endGame(
-            @RequestParam String gameId
-    ) {
-        return connect4GameService.endGame(gameId);
     }
 }
