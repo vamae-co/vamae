@@ -15,11 +15,13 @@ public class Connect4Game {
     @Id
     @GeneratedValue
     private String id;
-    private Long firstPlayerId;
-    private Long secondPlayerId;
+    private String firstPlayerId;
+    private String secondPlayerId;
     private int betSum;
     @Setter
     private Connect4 game;
     @Setter
     private Piece currentPlayer;
+    @Setter
+    private boolean isWinFlag;
 }

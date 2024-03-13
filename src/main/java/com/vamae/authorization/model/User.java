@@ -30,6 +30,7 @@ public class User implements UserDetails {
     private boolean isActive;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private int balance;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
