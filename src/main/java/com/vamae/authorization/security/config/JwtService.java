@@ -1,5 +1,6 @@
 package com.vamae.authorization.security.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +20,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private final String SECRET_KEY = System.getenv("TOKEN_GENERATION_KEY");
+    private final String SECRET_KEY = Dotenv.load().get("TOKEN_GENERATION_KEY");
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
