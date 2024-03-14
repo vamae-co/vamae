@@ -72,6 +72,13 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.vamae</groupId>
+			<artifactId>connect4</artifactId>
+			<version>1.0.0-RELEASE</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/connect4.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>
