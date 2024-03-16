@@ -3,8 +3,8 @@ package com.vamae.connect4.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.vamae.controller.Connect4;
-import org.vamae.enums.Piece;
+import com.vamae.connect4lib.controller.Connect4;
+import com.vamae.connect4lib.enums.Piece;
 
 @Document
 @Getter

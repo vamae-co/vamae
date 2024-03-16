@@ -5,10 +5,10 @@ import com.vamae.connect4.entity.Connect4Game;
 import com.vamae.connect4.repository.Connect4GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.vamae.controller.Connect4;
-import org.vamae.controller.GameBoardController;
-import org.vamae.entity.GameBoard;
-import org.vamae.enums.Piece;
+import com.vamae.connect4lib.controller.Connect4;
+import com.vamae.connect4lib.controller.GameBoardController;
+import com.vamae.connect4lib.entity.GameBoard;
+import com.vamae.connect4lib.enums.Piece;
 
 import java.util.NoSuchElementException;
 
