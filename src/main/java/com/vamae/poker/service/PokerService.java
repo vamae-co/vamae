@@ -5,6 +5,7 @@ import com.vamae.poker.lib.models.dto.TableDto;
 import com.vamae.poker.lib.models.records.Settings;
 import com.vamae.poker.model.PokerGameSession;
 import com.vamae.poker.model.requests.MoveRequest;
+import com.vamae.poker.model.responses.CreateResponse;
 import com.vamae.poker.repository.PokerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class PokerService {
         return repository.findAll();
     }
 
-    public PokerGameSession create(Settings settings, Principal principal) {
+    public CreateResponse create(Settings settings, Principal principal) {
         TableDto table = Poker.create(settings);
 
         Map<String, String> playersLinks = new HashMap<>();
@@ -33,12 +34,14 @@ public class PokerService {
                 principal.getName()
         );
 
-        return repository.save(
+        PokerGameSession session = repository.save(
                 PokerGameSession.builder()
                         .table(table)
                         .playersLinks(playersLinks)
                         .build()
         );
+
+        return new CreateResponse(session.getId());
     }
 
     public PokerGameSession join(String id, Principal principal) {
@@ -69,7 +72,17 @@ public class PokerService {
         return repository.save(session);
     }
 
-    public PokerGameSession start(String id, Principal principal) {
+    private TableDto makeMove(MoveRequest request, PokerGameSession session) {
+        return switch (request.action()) {
+            case BET -> Poker.bet(session.getTable(), request.amount());
+            case CALL -> Poker.call(session.getTable());
+            case FOLD -> Poker.fold(session.getTable());
+            case CHECK -> Poker.check(session.getTable());
+            case RAISE -> Poker.raise(session.getTable(), request.amount());
+        };
+    }
+
+    public PokerGameSession start(String id) {
         PokerGameSession session = repository.findById(id)
                 .orElseThrow();
 
@@ -80,13 +93,14 @@ public class PokerService {
         return repository.save(session);
     }
 
-    private TableDto makeMove(MoveRequest request, PokerGameSession session) {
-        return switch (request.action()) {
-            case BET -> Poker.bet(session.getTable(), request.amount());
-            case CALL -> Poker.call(session.getTable());
-            case FOLD -> Poker.fold(session.getTable());
-            case CHECK -> Poker.check(session.getTable());
-            case RAISE -> Poker.raise(session.getTable(), request.amount());
-        };
+    public PokerGameSession end(String id) {
+        PokerGameSession session = repository.findById(id)
+                .orElseThrow();
+
+        TableDto tableDto = Poker.end(session.getTable());
+
+        session.setTable(tableDto);
+
+        return repository.save(session);
     }
 }
