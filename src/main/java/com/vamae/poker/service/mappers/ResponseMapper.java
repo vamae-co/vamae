@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MoveResponseMapper {
+public class ResponseMapper {
     private final PlayerMapper playerMapper;
 
     public PublicResponse toPublic(PokerGameSession session) {

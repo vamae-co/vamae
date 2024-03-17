@@ -1,4 +1,4 @@
 package com.vamae.poker.model.requests;
 
-public record GameRequest(String id) {
+public record GameRequest(String gameId) {
 }

@@ -8,7 +8,7 @@ import com.vamae.poker.model.PokerGameSession;
 import com.vamae.poker.model.responses.PublicResponse;
 import com.vamae.poker.service.mappers.GameMapper;
 import com.vamae.poker.service.PokerService;
-import com.vamae.poker.service.mappers.MoveResponseMapper;
+import com.vamae.poker.service.mappers.ResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -25,7 +25,7 @@ import java.util.List;
 public class PokerController {
 
     private final GameMapper gameMapper;
-    private final MoveResponseMapper responseMapper;
+    private final ResponseMapper responseMapper;
     private final PokerService pokerService;
     private final SimpMessagingTemplate messagingTemplate;
 
