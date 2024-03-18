@@ -3,8 +3,8 @@ package com.vamae.connect4.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
-import com.vamae.connect4lib.controller.Connect4;
-import com.vamae.connect4lib.enums.Piece;
+import com.vamae.connect4.lib.controller.Connect4;
+import com.vamae.connect4.lib.enums.Piece;
 
 @Document
 @Getter
@@ -12,6 +12,7 @@ import com.vamae.connect4lib.enums.Piece;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Connect4Game {
+
     @Id
     @GeneratedValue
     private String id;
