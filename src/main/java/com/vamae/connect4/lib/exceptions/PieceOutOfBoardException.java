@@ -1,4 +1,4 @@
-package com.vamae.connect4lib.exceptions;
+package com.vamae.connect4.lib.exceptions;
 
 /**
  * Exception if piece is out of board
