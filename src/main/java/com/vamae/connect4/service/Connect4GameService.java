@@ -2,6 +2,8 @@ package com.vamae.connect4.service;
 
 import com.vamae.authorization.service.UserService;
 import com.vamae.connect4.entity.Connect4Game;
+import com.vamae.connect4.mapper.GameMapper;
+import com.vamae.connect4.model.dto.GameDto;
 import com.vamae.connect4.payload.request.InitializationRequest;
 import com.vamae.connect4.payload.request.JoinRequest;
 import com.vamae.connect4.payload.request.MoveRequest;
@@ -19,8 +21,10 @@ import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
 public class Connect4GameService {
+
     private final Connect4GameRepository connect4GameRepository;
     private final UserService userService;
+    private final GameMapper gameMapper;
 
     public Connect4Game init(InitializationRequest initializationRequest) {
         Connect4 game = new Connect4(
@@ -79,8 +83,13 @@ public class Connect4GameService {
         }
     }
 
-    public List<Connect4Game> getAllGames() {
-        return connect4GameRepository.findAll();
+    public List<GameDto> getAllGames() {
+        List<Connect4Game> allGames = connect4GameRepository.findAll();
+
+        return allGames.stream()
+                .filter(game -> game.getSecondPlayerId().isEmpty())
+                .map(gameMapper::toDto)
+                .toList();
     }
 
     public Connect4Game join(JoinRequest joinRequest) {

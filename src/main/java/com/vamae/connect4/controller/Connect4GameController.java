@@ -1,5 +1,6 @@
 package com.vamae.connect4.controller;
 
+import com.vamae.connect4.model.dto.GameDto;
 import com.vamae.connect4.payload.request.InitializationRequest;
 import com.vamae.connect4.payload.request.JoinRequest;
 import com.vamae.connect4.payload.request.MoveRequest;
@@ -20,7 +21,7 @@ public class Connect4GameController {
     private final Connect4GameService connect4GameService;
 
     @GetMapping("/games")
-    public List<Connect4Game> getAllGames() {
+    public List<GameDto> getAllGames() {
         return connect4GameService.getAllGames();
     }
 
