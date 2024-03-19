@@ -8,7 +8,7 @@ import com.vamae.poker.model.responses.JoinResponse;
 import com.vamae.poker.model.responses.LobbyResponse;
 import com.vamae.poker.model.PokerGameSession;
 import com.vamae.poker.model.responses.PublicResponse;
-import com.vamae.poker.service.mappers.GameMapper;
+import com.vamae.poker.service.mappers.LobbyMapper;
 import com.vamae.poker.service.PokerService;
 import com.vamae.poker.service.mappers.ResponseMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,14 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PokerController {
 
-    private final GameMapper gameMapper;
+    private final LobbyMapper lobbyMapper;
     private final ResponseMapper responseMapper;
     private final PokerService pokerService;
     private final SimpMessagingTemplate messagingTemplate;
 
     @GetMapping("/games")
     public List<LobbyResponse> getAllNotStartedGames() {
-        return gameMapper.toResponse(pokerService.findAllNotStarted());
+        return lobbyMapper.toResponse(pokerService.findAllNotStarted());
     }
 
     @PostMapping("/games")
