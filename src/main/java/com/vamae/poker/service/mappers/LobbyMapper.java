@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GameMapper {
+public class LobbyMapper {
     public LobbyResponse toResponse(PokerGameSession session) {
         return LobbyResponse.builder()
                 .id(session.getId())
