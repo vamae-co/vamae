@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/poker")
 @RequiredArgsConstructor
 public class PokerController {
 
@@ -32,12 +31,12 @@ public class PokerController {
     private final PokerService pokerService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    @GetMapping("/games")
+    @GetMapping("/poker/games")
     public List<LobbyResponse> getAllNotStartedGames() {
         return lobbyMapper.toResponse(pokerService.findAllNotStarted());
     }
 
-    @PostMapping("/games")
+    @PostMapping("/poker/games")
     public CreateResponse create(
             @RequestBody Settings settings,
             Principal principal
@@ -45,7 +44,7 @@ public class PokerController {
         return pokerService.create(settings, principal);
     }
 
-    @MessageMapping("/game.join")
+    @MessageMapping("/poker/game.join")
     @SendTo("/topic/poker")
     public JoinResponse join(
             @Payload GameRequest request,
@@ -62,7 +61,7 @@ public class PokerController {
         return new JoinResponse(newPlayerId);
     }
 
-    @MessageMapping("/game.start")
+    @MessageMapping("/poker/game.start")
     @SendTo("/topic/poker")
     public PublicResponse start(
             @Payload GameRequest request
@@ -84,7 +83,7 @@ public class PokerController {
         return responseMapper.toPublic(session);
     }
 
-    @MessageMapping("/game.move")
+    @MessageMapping("/poker/game.move")
     @SendTo("/topic/poker")
     public PublicResponse move(
             @Payload MoveRequest request
@@ -94,7 +93,7 @@ public class PokerController {
         return sendResponses(session);
     }
 
-    @MessageMapping("/game.end")
+    @MessageMapping("/poker/game.end")
     @SendTo("/topic/poker")
     public PublicResponse end(
             @Payload GameRequest request
