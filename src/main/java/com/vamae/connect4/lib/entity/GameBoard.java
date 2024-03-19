@@ -1,7 +1,7 @@
-package com.vamae.connect4lib.entity;
+package com.vamae.connect4.lib.entity;
 
 import lombok.Getter;
-import com.vamae.connect4lib.enums.Piece;
+import com.vamae.connect4.lib.enums.Piece;
 
 import java.util.ArrayList;
 import java.util.List;

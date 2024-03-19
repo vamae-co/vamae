@@ -1,10 +1,10 @@
-package com.vamae.connect4lib.controller;
+package com.vamae.connect4.lib.controller;
 
+import com.vamae.connect4.lib.entity.GameBoard;
+import com.vamae.connect4.lib.enums.Piece;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import com.vamae.connect4lib.entity.GameBoard;
-import com.vamae.connect4lib.enums.Piece;
-import com.vamae.connect4lib.exceptions.PieceOutOfBoardException;
+import com.vamae.connect4.lib.exceptions.PieceOutOfBoardException;
 
 import java.util.List;
 
