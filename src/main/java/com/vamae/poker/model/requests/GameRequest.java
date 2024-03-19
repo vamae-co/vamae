@@ -1,4 +1,9 @@
 package com.vamae.poker.model.requests;
 
-public record GameRequest(String gameId) {
+import jakarta.validation.constraints.NotBlank;
+
+public record GameRequest(
+        @NotBlank
+        String gameId
+) {
 }
