@@ -1,12 +1,13 @@
 package com.vamae.authorization.payload.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import lombok.Data;
 
-@Data
 @Builder
-public class RegisterRequest {
-
-    private String username;
-    private String password;
+public record RegisterRequest (
+        @NotBlank(message = "Username cannot be empty")
+        String username,
+        @NotBlank(message = "Password cannot be empty")
+        String password
+) {
 }

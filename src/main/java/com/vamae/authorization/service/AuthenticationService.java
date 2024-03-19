@@ -25,8 +25,8 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .username(request.username())
+                .password(passwordEncoder.encode(request.password()))
                 .isActive(true)
                 .role(Role.USER)
                 .build();
@@ -43,12 +43,12 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
+                        request.username(),
+                        request.password()
                 )
         );
 
-        User user = userRepository.findUserByUsername(request.getUsername())
+        User user = userRepository.findUserByUsername(request.username())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         String jwtToken = jwtService.generateToken(user);
