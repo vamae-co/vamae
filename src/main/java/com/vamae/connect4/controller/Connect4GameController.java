@@ -9,6 +9,7 @@ import com.vamae.connect4.entity.Connect4Game;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class Connect4GameController {
     }
 
     @MessageMapping("/connect4/game.move")
+    @SendTo("/topic/connect4")
     public Connect4Game move(
             @Payload MoveRequest moveRequest
             ) {
@@ -39,6 +41,7 @@ public class Connect4GameController {
     }
 
     @MessageMapping("/connect4/game.join")
+    @SendTo("/topic/connect4")
     public Connect4Game move(
             @Payload JoinRequest joinRequest
     ) {
