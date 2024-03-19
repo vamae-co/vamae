@@ -33,8 +33,8 @@ public class PokerController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @GetMapping("/games")
-    public List<LobbyResponse> getAllGames() {
-        return gameMapper.toResponse(pokerService.findAll());
+    public List<LobbyResponse> getAllNotStartedGames() {
+        return gameMapper.toResponse(pokerService.findAllNotStarted());
     }
 
     @PostMapping("/games")

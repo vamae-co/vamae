@@ -14,6 +14,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +22,10 @@ public class PokerService {
 
     private final PokerRepository repository;
 
-    public List<PokerGameSession> findAll() {
-        return repository.findAll();
+    public List<PokerGameSession> findAllNotStarted() {
+        return repository.findAll().stream()
+                .filter(session -> Objects.equals(session.getTable().state(), "Waiting"))
+                .toList();
     }
 
     public CreateResponse create(Settings settings, Principal principal) {
