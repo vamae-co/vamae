@@ -61,7 +61,7 @@ class AuthenticationServiceTest {
         verify(authenticationManager, times(1)).authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getUsername(),
-                        authenticationRequest.getPassword()));
+                        authenticationRequest.password()));
     }
 
     @Test
