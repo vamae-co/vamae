@@ -15,8 +15,6 @@
 	<description>Website with table games</description>
 	<properties>
 		<java.version>21</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mainClass>com.vamae.VamaeApplication</mainClass>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -105,7 +103,16 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<source>21</source>
+					<target>21</target>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
