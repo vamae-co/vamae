@@ -2,7 +2,6 @@ package com.vamae.authorization.model;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
@@ -21,8 +20,6 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
-    private String id;
     @NotEmpty(message = "Username is required")
     private String username;
     @NotEmpty(message = "Password is required")

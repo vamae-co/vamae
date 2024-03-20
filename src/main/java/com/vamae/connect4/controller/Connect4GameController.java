@@ -12,6 +12,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,9 +28,10 @@ public class Connect4GameController {
 
     @GetMapping("/connect4/game/create")
     public Connect4Game initGame(
-            @RequestBody InitializationRequest initializationRequest
+            @RequestBody InitializationRequest initializationRequest,
+            Principal principal
             ) {
-        return connect4GameService.init(initializationRequest);
+        return connect4GameService.init(initializationRequest, principal);
     }
 
     @MessageMapping("/connect4/game.move")
@@ -43,8 +45,9 @@ public class Connect4GameController {
     @MessageMapping("/connect4/game.join")
     @SendTo("/topic/connect4")
     public Connect4Game move(
-            @Payload JoinRequest joinRequest
+            @Payload JoinRequest joinRequest,
+            Principal principal
     ) {
-        return connect4GameService.join(joinRequest);
+        return connect4GameService.join(joinRequest, principal);
     }
 }

@@ -6,8 +6,6 @@ import lombok.Builder;
 @Builder
 public record JoinRequest (
         @NotBlank
-        String secondPlayerId,
-        @NotBlank
         String gameId
 ) {
 }
