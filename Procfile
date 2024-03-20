@@ -1,0 +1,1 @@
+web: java -jar target/vamae-0.1.0.jar
