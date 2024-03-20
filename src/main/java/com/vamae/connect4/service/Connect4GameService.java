@@ -15,6 +15,7 @@ import com.vamae.connect4.lib.controller.GameBoardController;
 import com.vamae.connect4.lib.entity.GameBoard;
 import com.vamae.connect4.lib.enums.Piece;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,21 +27,21 @@ public class Connect4GameService {
     private final UserService userService;
     private final GameMapper gameMapper;
 
-    public Connect4Game init(InitializationRequest initializationRequest) {
+    public Connect4Game init(InitializationRequest initializationRequest, Principal principal) {
         Connect4 game = new Connect4(
                 new GameBoardController(
                         new GameBoard(initializationRequest.columns(), initializationRequest.rows())
                 )
         );
         Connect4Game connect4Game = Connect4Game.builder()
-                .firstPlayerId(initializationRequest.firstPlayerId())
+                .firstPlayerUsername(principal.getName())
                 .betSum(initializationRequest.bet() * 2)
                 .game(game)
                 .currentPlayer(Piece.PLAYER_1)
                 .isWinFlag(false)
                 .build();
 
-        userService.changeBalance(initializationRequest.firstPlayerId(), -initializationRequest.bet());
+        userService.changeBalance(principal.getName(), -initializationRequest.bet());
 
         return connect4GameRepository.save(connect4Game);
     }
@@ -64,10 +65,10 @@ public class Connect4GameService {
 
     private Connect4Game endGame(Connect4Game game) {
         if(game.getCurrentPlayer() == Piece.PLAYER_1) {
-            userService.changeBalance(game.getFirstPlayerId(), game.getBetSum());
+            userService.changeBalance(game.getFirstPlayerUsername(), game.getBetSum());
         }
         else {
-            userService.changeBalance(game.getSecondPlayerId(), game.getBetSum());
+            userService.changeBalance(game.getSecondPlayerUsername(), game.getBetSum());
         }
 
         connect4GameRepository.delete(game);
@@ -87,19 +88,19 @@ public class Connect4GameService {
         List<Connect4Game> allGames = connect4GameRepository.findAll();
 
         return allGames.stream()
-                .filter(game -> game.getSecondPlayerId().isEmpty())
+                .filter(game -> game.getSecondPlayerUsername().isEmpty())
                 .map(gameMapper::toDto)
                 .toList();
     }
 
-    public Connect4Game join(JoinRequest joinRequest) {
+    public Connect4Game join(JoinRequest joinRequest, Principal principal) {
         Connect4Game game = connect4GameRepository.findById(joinRequest.gameId())
                 .orElseThrow(() -> new NoSuchElementException("Game not found!"));
 
-        userService.changeBalance(joinRequest.secondPlayerId(), -(game.getBetSum() / 2));
+        userService.changeBalance(principal.getName(), -(game.getBetSum() / 2));
 
         game = Connect4Game.builder()
-                .secondPlayerId(joinRequest.secondPlayerId())
+                .secondPlayerUsername(principal.getName())
                 .build();
 
         return connect4GameRepository.save(game);

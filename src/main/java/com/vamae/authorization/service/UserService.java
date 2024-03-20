@@ -13,16 +13,16 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public int changeBalance(String userId, int offset) {
-        User user = findUserById(userId);
+    public int changeBalance(String username, int offset) {
+        User user = findUserByUsername(username);
         user.setBalance(user.getBalance() + offset);
         userRepository.save(user);
 
         return user.getBalance();
     }
 
-    public User findUserById(String id) {
-        return userRepository.findUserById(id)
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new NoSuchElementException("User not found!"));
     }
 }

@@ -17,15 +17,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
+    private final static String USERNAME = "testUsername";
+    private static final String INVALID_USERNAME = "invalid_username";
+
     private final static User USER = User.builder()
-            .id("id")
-            .username("testUsername")
+            .username(USERNAME)
             .password("testPassword")
             .balance(1000)
             .build();
-
-    private final static String ID = "id";
-    private static final String INVALID_ID = "invalid_id";
 
     @Mock
     private UserRepository userRepository;
@@ -37,9 +36,9 @@ class UserServiceTest {
     void changeBalance() {
         int offset = 100;
 
-        when(userRepository.findUserById(ID)).thenReturn(Optional.of(USER));
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.of(USER));
 
-        int result = userService.changeBalance(ID, offset);
+        int result = userService.changeBalance(USERNAME, offset);
 
         assertEquals(1100, result);
         verify(userRepository, times(1)).save(USER);
@@ -47,19 +46,19 @@ class UserServiceTest {
 
     @Test
     public void findUserById_Positive() {
-        when(userRepository.findUserById(ID)).thenReturn(Optional.of(USER));
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.of(USER));
 
-        User foundUser = userService.findUserById(ID);
+        User foundUser = userService.findUserByUsername(USERNAME);
 
         assertEquals(USER, foundUser);
-        verify(userRepository, times(1)).findUserById(ID);
+        verify(userRepository, times(1)).findUserByUsername(USERNAME);
     }
 
     @Test
     public void findUserById_Negative() {
-        when(userRepository.findUserById(INVALID_ID)).thenReturn(Optional.empty());
+        when(userRepository.findUserByUsername(INVALID_USERNAME)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> userService.findUserById(INVALID_ID));
-        verify(userRepository, times(1)).findUserById(INVALID_ID);
+        assertThrows(NoSuchElementException.class, () -> userService.findUserByUsername(INVALID_USERNAME));
+        verify(userRepository, times(1)).findUserByUsername(INVALID_USERNAME);
     }
 }

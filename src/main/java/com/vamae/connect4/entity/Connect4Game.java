@@ -16,8 +16,8 @@ public class Connect4Game {
     @Id
     @GeneratedValue
     private String id;
-    private String firstPlayerId;
-    private String secondPlayerId;
+    private String firstPlayerUsername;
+    private String secondPlayerUsername;
     private int betSum;
     @Setter
     private Connect4 game;
