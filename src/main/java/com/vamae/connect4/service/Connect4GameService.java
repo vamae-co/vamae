@@ -16,6 +16,7 @@ import com.vamae.connect4.lib.entity.GameBoard;
 import com.vamae.connect4.lib.enums.Piece;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,9 +29,14 @@ public class Connect4GameService {
     private final GameMapper gameMapper;
 
     public Connect4Game init(InitializationRequest initializationRequest, Principal principal) {
+        List<List<Piece>> columns = new ArrayList<>();
+        for(int i = 0; i < initializationRequest.columns(); i++) {
+            columns.add(new ArrayList<>());
+        }
+
         Connect4 game = new Connect4(
                 new GameBoardController(
-                        new GameBoard(initializationRequest.columns(), initializationRequest.rows())
+                        new GameBoard(columns, initializationRequest.rows())
                 )
         );
         Connect4Game connect4Game = Connect4Game.builder()
@@ -88,7 +94,7 @@ public class Connect4GameService {
         List<Connect4Game> allGames = connect4GameRepository.findAll();
 
         return allGames.stream()
-                .filter(game -> game.getSecondPlayerUsername().isEmpty())
+                .filter(game -> game.getSecondPlayerUsername() == null)
                 .map(gameMapper::toDto)
                 .toList();
     }
