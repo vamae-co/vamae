@@ -26,7 +26,7 @@ public class Connect4GameController {
         return connect4GameService.getAllGames();
     }
 
-    @GetMapping("/connect4/game/create")
+    @PostMapping("/connect4/game/create")
     public Connect4Game initGame(
             @RequestBody InitializationRequest initializationRequest,
             Principal principal
