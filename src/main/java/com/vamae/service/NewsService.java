@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -30,11 +31,13 @@ public class NewsService {
     }
 
     public News createNews(@NotNull CreateNewsRequest request) {
-        return News.builder()
-                .date(request.date())
+        News news = News.builder()
+                .date(new Date())
                 .content(request.content())
                 .imageUrl(request.imageUrl())
                 .tags(request.tags())
                 .build();
+
+        return newsRepository.save(news);
     }
 }

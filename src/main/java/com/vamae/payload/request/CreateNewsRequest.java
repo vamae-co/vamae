@@ -9,8 +9,7 @@ import java.util.List;
 
 @Builder
 public record CreateNewsRequest(
-    @NotBlank(message = "Date is required")
-    Date date,
+
     @NotBlank(message = "Content is required")
     String content,
     String imageUrl,
