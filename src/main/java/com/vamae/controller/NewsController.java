@@ -1,15 +1,12 @@
 package com.vamae.controller;
 
 import com.vamae.entity.News;
-import com.vamae.entity.Tag;
 import com.vamae.payload.request.CreateNewsRequest;
 import com.vamae.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController

@@ -1,7 +1,6 @@
 package com.vamae.service;
 
 import com.vamae.entity.News;
-import com.vamae.entity.Tag;
 import com.vamae.payload.request.CreateNewsRequest;
 import com.vamae.repository.NewsRepository;
 import jakarta.validation.constraints.NotNull;
