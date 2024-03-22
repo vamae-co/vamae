@@ -33,6 +33,7 @@ public class NewsService {
     public News createNews(@NotNull CreateNewsRequest request) {
         News news = News.builder()
                 .date(new Date())
+                .header(request.header())
                 .content(request.content())
                 .imageUrl(request.imageUrl())
                 .tags(request.tags())

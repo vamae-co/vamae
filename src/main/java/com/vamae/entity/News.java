@@ -24,6 +24,8 @@ public class News {
     private String id;
     @NotBlank(message = "Date is required")
     private Date date;
+    @NotBlank(message = "Header is required")
+    private String header;
     @NotBlank(message = "Content is required")
     private String content;
     private String imageUrl;
