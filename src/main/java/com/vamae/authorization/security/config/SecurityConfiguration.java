@@ -20,7 +20,8 @@ public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
             "/auth/**",
-            "/error"
+            "/error",
+            "/news"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
