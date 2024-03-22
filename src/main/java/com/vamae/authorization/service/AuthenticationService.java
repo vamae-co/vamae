@@ -29,6 +29,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.password()))
                 .isActive(true)
                 .role(Role.USER)
+                .balance(1000)
                 .build();
         userRepository.save(user);
 
