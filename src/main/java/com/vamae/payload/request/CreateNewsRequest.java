@@ -4,7 +4,6 @@ import com.vamae.entity.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
-import java.util.Date;
 import java.util.List;
 
 @Builder
