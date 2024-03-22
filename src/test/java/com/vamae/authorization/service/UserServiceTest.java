@@ -33,15 +33,28 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void changeBalance() {
-        int offset = 100;
+    void changeBalance_Successful() {
+        int offsetPositive = 100;
+        int offsetNegative = -200;
 
         when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.of(USER));
 
-        int result = userService.changeBalance(USERNAME, offset);
+        int resultDepositOperation = userService.changeBalance(USERNAME, offsetPositive);
+        int resultWithdrawOperation = userService.changeBalance(USERNAME, offsetNegative);
 
-        assertEquals(1100, result);
-        verify(userRepository, times(1)).save(USER);
+        assertEquals(1100, resultDepositOperation);
+        assertEquals(900, resultWithdrawOperation);
+        verify(userRepository, times(2)).save(USER);
+    }
+
+    @Test
+    void changeBalance_OffsetGreaterThanBalance() {
+        int offset = -1100;
+
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.of(USER));
+
+        assertThrows(IllegalArgumentException.class, () -> userService.changeBalance(USERNAME, offset));
+        verify(userRepository, times(0)).save(USER);
     }
 
     @Test
