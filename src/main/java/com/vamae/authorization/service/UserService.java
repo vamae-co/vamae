@@ -15,7 +15,14 @@ public class UserService {
 
     public int changeBalance(String username, int offset) {
         User user = findUserByUsername(username);
-        user.setBalance(user.getBalance() + offset);
+        int userBalance = user.getBalance();
+        if((offset < 0 && userBalance >= -offset) || offset > 0) {
+            user.setBalance(user.getBalance() + offset);
+        }
+        else if(offset < 0) {
+            throw new IllegalArgumentException("User have not enough money!");
+        }
+
         userRepository.save(user);
 
         return user.getBalance();
