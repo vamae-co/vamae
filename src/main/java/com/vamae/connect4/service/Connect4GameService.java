@@ -55,6 +55,10 @@ public class Connect4GameService {
     public Connect4Game move(MoveRequest moveRequest) {
         Connect4Game currentGame = connect4GameRepository.findById(moveRequest.gameId())
                 .orElseThrow(() -> new NoSuchElementException("Game not found!"));
+        if(currentGame.getSecondPlayerUsername() == null) {
+            throw new NullPointerException("First player cannot make moves until the second player has joined the game");
+        }
+
         Connect4 currentGameObject = currentGame.getGame();
 
         boolean isWin = currentGameObject.move(moveRequest.columnIndex(), currentGame.getCurrentPlayer());
