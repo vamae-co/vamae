@@ -49,9 +49,7 @@ public class Connect4GameService {
 
         userService.changeBalance(principal.getName(), -initializationRequest.bet());
 
-        connect4GameRepository.save(connect4Game);
-
-        return connect4Game.getId();
+        return connect4GameRepository.save(connect4Game).getId();
     }
 
     public Connect4Game move(MoveRequest moveRequest) {
