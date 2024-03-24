@@ -18,7 +18,7 @@ public class NewsService {
     private final NewsRepository newsRepository;
 
     public News getNewsById(String id){
-        return newsRepository.findNewsById(id)
+        return newsRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("News not found!"));
     }
 
