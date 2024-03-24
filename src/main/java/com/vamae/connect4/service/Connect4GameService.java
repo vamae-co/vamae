@@ -28,7 +28,7 @@ public class Connect4GameService {
     private final UserService userService;
     private final GameMapper gameMapper;
 
-    public Connect4Game init(InitializationRequest initializationRequest, Principal principal) {
+    public String init(InitializationRequest initializationRequest, Principal principal) {
         List<List<Piece>> columns = new ArrayList<>();
         for(int i = 0; i < initializationRequest.columns(); i++) {
             columns.add(new ArrayList<>());
@@ -49,12 +49,11 @@ public class Connect4GameService {
 
         userService.changeBalance(principal.getName(), -initializationRequest.bet());
 
-        return connect4GameRepository.save(connect4Game);
+        return connect4GameRepository.save(connect4Game).getId();
     }
 
     public Connect4Game move(MoveRequest moveRequest) {
-        Connect4Game currentGame = connect4GameRepository.findById(moveRequest.gameId())
-                .orElseThrow(() -> new NoSuchElementException("Game not found!"));
+        Connect4Game currentGame = getGameById(moveRequest.gameId());
         if(currentGame.getSecondPlayerUsername() == null) {
             throw new NullPointerException("First player cannot make moves until the second player has joined the game");
         }
@@ -71,6 +70,11 @@ public class Connect4GameService {
 
         currentGame.setGame(currentGameObject);
         return connect4GameRepository.save(currentGame);
+    }
+
+    public Connect4Game getGameById(String id) {
+        return connect4GameRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Game not found!"));
     }
 
     private Connect4Game endGame(Connect4Game game) {
@@ -104,8 +108,7 @@ public class Connect4GameService {
     }
 
     public Connect4Game join(JoinRequest joinRequest, Principal principal) {
-        Connect4Game game = connect4GameRepository.findById(joinRequest.gameId())
-                .orElseThrow(() -> new NoSuchElementException("Game not found!"));
+        Connect4Game game = getGameById(joinRequest.gameId());
 
         userService.changeBalance(principal.getName(), -(game.getBetSum() / 2));
 

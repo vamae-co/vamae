@@ -26,8 +26,13 @@ public class Connect4GameController {
         return connect4GameService.getAllGames();
     }
 
+    @GetMapping("/connect4/game/{id}")
+    public Connect4Game getGameById(@PathVariable String id) {
+        return connect4GameService.getGameById(id);
+    }
+
     @PostMapping("/connect4/game/create")
-    public Connect4Game initGame(
+    public String initGame(
             @RequestBody InitializationRequest initializationRequest,
             Principal principal
             ) {
