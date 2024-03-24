@@ -44,7 +44,7 @@ public class Connect4GameController {
 
     @MessageMapping("/connect4/game.join")
     @SendTo("/topic/connect4")
-    public Connect4Game move(
+    public Connect4Game join(
             @Payload JoinRequest joinRequest,
             Principal principal
     ) {
