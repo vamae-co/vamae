@@ -37,6 +37,8 @@ public class AuthenticationService {
 
         String jwtToken = jwtService.generateToken(user);
 
+        statisticService.updateAuthCount(request.username());
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -56,7 +58,7 @@ public class AuthenticationService {
 
         String jwtToken = jwtService.generateToken(user);
 
-        statisticService.getAuthTimes(request.username());
+        statisticService.updateAuthCount(request.username());
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)

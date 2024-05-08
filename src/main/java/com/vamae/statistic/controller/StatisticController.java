@@ -1,6 +1,5 @@
 package com.vamae.statistic.controller;
 
-import com.vamae.statistic.model.Statistic;
 import com.vamae.statistic.payload.response.StatisticResponse;
 import com.vamae.statistic.service.StatisticService;
 
@@ -20,8 +19,7 @@ public class StatisticController {
     // Mapping to get statistics for the authenticated user
     @GetMapping("/statistic")
     public StatisticResponse getStatistic(@RequestParam String username) {
-        Statistic statistic = statisticService.getStatistic(username);
-        return new StatisticResponse(statistic.getUsername(), statistic.getAuthTimes());
+        return statisticService.getStatistic(username);
     }
 
 }

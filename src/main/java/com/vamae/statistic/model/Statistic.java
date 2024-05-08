@@ -1,6 +1,6 @@
 package com.vamae.statistic.model;
 
-import jakarta.persistence.GeneratedValue;
+import com.vamae.authorization.model.User;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,8 +13,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class Statistic {
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
+    private User user;
+
+    public Statistic(String username, int authCount) {
+        this.username = username;
+        this.authCount = authCount;
+    }
     private String username;
-    private int authTimes;
+    private int authCount;
 }

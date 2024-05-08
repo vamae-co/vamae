@@ -1,9 +1,7 @@
 package com.vamae.statistic.service;
 
-import com.vamae.authorization.model.User;
-import com.vamae.authorization.repository.UserRepository;
-import com.vamae.authorization.service.UserService;
 import com.vamae.statistic.model.Statistic;
+import com.vamae.statistic.payload.response.StatisticResponse;
 import com.vamae.statistic.repository.StatisticRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,26 +13,48 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StatisticService {
     private final StatisticRepository statisticRepository;
-    private final UserService userService;
-    private final UserRepository userRepository;
 
     @Transactional
-    public void getAuthTimes(String username) {
-        Optional<User> userOptional = userRepository.findUserByUsername(username);
+    public StatisticResponse updateAuthCount(String username) {
+        Optional<Statistic> statistic = statisticRepository.findByUsername(username);
 
-        if (userOptional.isPresent()) {
-            Statistic statistic = statisticRepository.findByUsername(username)
-                    .orElseGet(() -> Statistic.builder().username(username).authTimes(0).build());
-
-            statistic.setAuthTimes(statistic.getAuthTimes() + 1);
-
-            statisticRepository.save(statistic);
+        if (statistic.isPresent()) {
+            Statistic presentStatistic = statistic.get();
+            int authCount = presentStatistic.getAuthCount();
+            statisticRepository.delete(presentStatistic);
+            Statistic newStatistic = new Statistic(username, authCount + 1);
+            statisticRepository.save(newStatistic);
+            return new StatisticResponse(username, newStatistic.getAuthCount());
+        }
+        else {
+            Statistic newStatistic = statisticRepository.save(new Statistic(username, 1));
+            return new StatisticResponse(username, newStatistic.getAuthCount());
         }
     }
-
-    public Statistic getStatistic(String username) {
-        return statisticRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Statistic not found"));
+    public StatisticResponse getStatistic(String username) {
+        Statistic statistic = statisticRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException(String.format("Statistic with username %s not found", username)));
+        return new StatisticResponse(username, statistic.getAuthCount());
     }
 
+    //    Method with updating mongodb value (doesn't work)
+    //    public StatisticResponse updateAuthTimes(String username) {
+    //        Optional<Statistic> statistic = statisticRepository.findByUsername(username);
+    //
+    //        if (statistic.isPresent()) {
+    //            int authTimes = statistic.get().getAuthTimes();
+    //            if(authTimes == 0) {
+    //                statistic.get().setAuthTimes(1);
+    //                statisticRepository.save(statistic.get());
+    //            }
+    //            else {
+    //                statistic.get().setAuthTimes(authTimes + 1);
+    //                statisticRepository.save(statistic.get());
+    //            }
+    //            return new StatisticResponse(username, statistic.get().getAuthTimes());
+    //        }
+    //        else {
+    //           Statistic newStatistic = statisticRepository.save(new Statistic(username, 1));
+    //           return new StatisticResponse(username, newStatistic.getAuthTimes());
+    //        }
+    //    }
 }
