@@ -28,7 +28,8 @@ public class StatisticService {
         Optional<Statistic> statistic = statisticRepository.findByUsername(username);
 
         if (statistic.isPresent()) {
-            int authTimes = statistic.get().getAuthCount();
+            Statistic authCountStatistic = statistic.get();
+            int authTimes = authCountStatistic.getAuthCount();
             if (authTimes == 0) {
                 statistic.get().setAuthCount(1);
                 statisticRepository.save(statistic.get());
@@ -38,7 +39,10 @@ public class StatisticService {
             }
             return new StatisticResponse(username, statistic.get().getAuthCount());
         } else {
-            Statistic newStatistic = statisticRepository.save(new Statistic(username, 1));
+            Statistic newStatistic = statisticRepository.save(Statistic.builder()
+                    .username(username)
+                    .authCount(1)
+                    .build());
             return new StatisticResponse(username, newStatistic.getAuthCount());
         }
     }

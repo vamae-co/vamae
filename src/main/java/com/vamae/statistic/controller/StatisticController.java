@@ -10,16 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
 @RestController
 @RequiredArgsConstructor
 public class StatisticController {
+
     private final StatisticService statisticService;
 
-    // Mapping to get statistics for the authenticated user
     @GetMapping("/statistic")
     public StatisticResponse getStatistic(@RequestParam String username) {
         return statisticService.getStatistic(username);
     }
-
 }
