@@ -7,10 +7,10 @@ import com.vamae.authorization.payload.request.RegisterRequest;
 import com.vamae.authorization.payload.response.AuthenticationResponse;
 import com.vamae.authorization.repository.UserRepository;
 import com.vamae.authorization.security.config.JwtService;
+import com.vamae.common.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,15 +41,19 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        User user = userRepository.findUserByUsername(request.username())
+                .orElseThrow(
+                        () -> new UserNotFoundException(
+                                String.format("User with username %s not found", request.username())
+                        )
+                );
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.username(),
                         request.password()
                 )
         );
-
-        User user = userRepository.findUserByUsername(request.username())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         String jwtToken = jwtService.generateToken(user);
 
