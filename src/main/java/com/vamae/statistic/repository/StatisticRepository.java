@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface StatisticRepository extends MongoRepository<Statistic, String> {
+
     Optional<Statistic> findByUsername(String username);
 }
