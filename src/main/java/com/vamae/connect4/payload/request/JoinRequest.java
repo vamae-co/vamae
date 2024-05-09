@@ -1,12 +1,11 @@
 package com.vamae.connect4.payload.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import lombok.Data;
 
-@Data
 @Builder
-public class JoinRequest {
-
-    private String secondPlayerId;
-    private String gameId;
+public record JoinRequest (
+        @NotBlank
+        String gameId
+) {
 }

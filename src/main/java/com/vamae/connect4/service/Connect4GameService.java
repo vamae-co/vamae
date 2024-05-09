@@ -15,6 +15,8 @@ import com.vamae.connect4.lib.controller.GameBoardController;
 import com.vamae.connect4.lib.entity.GameBoard;
 import com.vamae.connect4.lib.enums.Piece;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,31 +28,39 @@ public class Connect4GameService {
     private final UserService userService;
     private final GameMapper gameMapper;
 
-    public Connect4Game init(InitializationRequest initializationRequest) {
+    public String init(InitializationRequest initializationRequest, Principal principal) {
+        List<List<Piece>> columns = new ArrayList<>();
+        for(int i = 0; i < initializationRequest.columns(); i++) {
+            columns.add(new ArrayList<>());
+        }
+
         Connect4 game = new Connect4(
                 new GameBoardController(
-                        new GameBoard(initializationRequest.getColumns(), initializationRequest.getRows())
+                        new GameBoard(columns, initializationRequest.rows())
                 )
         );
         Connect4Game connect4Game = Connect4Game.builder()
-                .firstPlayerId(initializationRequest.getFirstPlayerId())
-                .betSum(initializationRequest.getBet() * 2)
+                .firstPlayerUsername(principal.getName())
+                .betSum(initializationRequest.bet() * 2)
                 .game(game)
                 .currentPlayer(Piece.PLAYER_1)
                 .isWinFlag(false)
                 .build();
 
-        userService.changeBalance(initializationRequest.getFirstPlayerId(), -initializationRequest.getBet());
+        userService.changeBalance(principal.getName(), -initializationRequest.bet());
 
-        return connect4GameRepository.save(connect4Game);
+        return connect4GameRepository.save(connect4Game).getId();
     }
 
     public Connect4Game move(MoveRequest moveRequest) {
-        Connect4Game currentGame = connect4GameRepository.findById(moveRequest.getGameId())
-                .orElseThrow(() -> new NoSuchElementException("Game not found!"));
+        Connect4Game currentGame = getGameById(moveRequest.gameId());
+        if(currentGame.getSecondPlayerUsername() == null) {
+            throw new NullPointerException("First player cannot make moves until the second player has joined the game");
+        }
+
         Connect4 currentGameObject = currentGame.getGame();
 
-        boolean isWin = currentGameObject.move(moveRequest.getColumnIndex(), currentGame.getCurrentPlayer());
+        boolean isWin = currentGameObject.move(moveRequest.columnIndex(), currentGame.getCurrentPlayer());
         if(isWin) {
             currentGame.setWinFlag(true);
             return endGame(currentGame);
@@ -62,12 +72,17 @@ public class Connect4GameService {
         return connect4GameRepository.save(currentGame);
     }
 
+    public Connect4Game getGameById(String id) {
+        return connect4GameRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Game not found!"));
+    }
+
     private Connect4Game endGame(Connect4Game game) {
         if(game.getCurrentPlayer() == Piece.PLAYER_1) {
-            userService.changeBalance(game.getFirstPlayerId(), game.getBetSum());
+            userService.changeBalance(game.getFirstPlayerUsername(), game.getBetSum());
         }
         else {
-            userService.changeBalance(game.getSecondPlayerId(), game.getBetSum());
+            userService.changeBalance(game.getSecondPlayerUsername(), game.getBetSum());
         }
 
         connect4GameRepository.delete(game);
@@ -87,19 +102,18 @@ public class Connect4GameService {
         List<Connect4Game> allGames = connect4GameRepository.findAll();
 
         return allGames.stream()
-                .filter(game -> game.getSecondPlayerId().isEmpty())
+                .filter(game -> game.getSecondPlayerUsername() == null)
                 .map(gameMapper::toDto)
                 .toList();
     }
 
-    public Connect4Game join(JoinRequest joinRequest) {
-        Connect4Game game = connect4GameRepository.findById(joinRequest.getGameId())
-                .orElseThrow(() -> new NoSuchElementException("Game not found!"));
+    public Connect4Game join(JoinRequest joinRequest, Principal principal) {
+        Connect4Game game = getGameById(joinRequest.gameId());
 
-        userService.changeBalance(joinRequest.getSecondPlayerId(), -(game.getBetSum() / 2));
+        userService.changeBalance(principal.getName(), -(game.getBetSum() / 2));
 
         game = Connect4Game.builder()
-                .secondPlayerId(joinRequest.getSecondPlayerId())
+                .secondPlayerUsername(principal.getName())
                 .build();
 
         return connect4GameRepository.save(game);
