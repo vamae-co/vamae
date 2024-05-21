@@ -11,7 +11,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
+import static com.vamae.authorization.model.Role.ADMIN;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -20,8 +22,11 @@ public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
             "/auth/**",
-            "/error",
-            "/news"
+            "/error"
+    };
+    private static final String[] ADMIN_LIST_URL = {
+            "/news/create",
+            "/news",
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -33,6 +38,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
+                                .requestMatchers(GET, "/news", "/news/**")
+                                .permitAll()
+                                .requestMatchers(POST, ADMIN_LIST_URL)
+                                .hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(DELETE, ADMIN_LIST_URL)
+                                .hasAnyAuthority(ADMIN.name())
                                 .anyRequest()
                                 .authenticated()
                 )
