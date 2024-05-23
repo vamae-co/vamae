@@ -48,7 +48,7 @@ public class NewsControllerIntegrationTest {
                 .tags(Arrays.asList(Tag.NEWS, Tag.UPDATE))
                 .build();
 
-        jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QWRtaW4iLCJpYXQiOjE3MTY0NTQ5MDMsImV4cCI6MTk4NjA0NTQ5MDN9.JS1R4ssNaWuosfYrzWSxoRW0B5VEHy3NMHUjtuepzlE";
+        jwtToken = System.getenv("TEST_JWT_TOKEN");
     }
 
     @Test
