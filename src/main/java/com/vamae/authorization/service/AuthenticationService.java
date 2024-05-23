@@ -9,6 +9,7 @@ import com.vamae.authorization.repository.UserRepository;
 import com.vamae.authorization.security.config.JwtService;
 import com.vamae.common.exception.UserNotFoundException;
 import com.vamae.statistic.service.StatisticService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final StatisticService statisticService;
+    private final TokenService tokenService;
 
     public AuthenticationResponse register(RegisterRequest request) {
         User user = User.builder()
@@ -36,6 +38,7 @@ public class AuthenticationService {
         userRepository.save(user);
 
         String jwtToken = jwtService.generateToken(user);
+        tokenService.createToken(jwtToken, jwtService.extractClaim(jwtToken, Claims::getExpiration));
 
         statisticService.updateAuthCount(request.username());
 
@@ -61,6 +64,7 @@ public class AuthenticationService {
         );
 
         String jwtToken = jwtService.generateToken(user);
+        tokenService.createToken(jwtToken, jwtService.extractClaim(jwtToken, Claims::getExpiration));
 
         statisticService.updateAuthCount(request.username());
 
