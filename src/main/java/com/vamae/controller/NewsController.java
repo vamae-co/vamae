@@ -4,6 +4,7 @@ import com.vamae.entity.News;
 import com.vamae.payload.request.CreateNewsRequest;
 import com.vamae.service.NewsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,10 +37,10 @@ public class NewsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.HeadersBuilder<?> deleteNewsById(
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteNewsById(
             @PathVariable String id
     ) {
         newsService.deleteNewsById(id);
-        return ResponseEntity.noContent();
     }
 }
