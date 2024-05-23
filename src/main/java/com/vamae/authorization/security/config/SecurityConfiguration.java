@@ -28,8 +28,7 @@ public class SecurityConfiguration {
             "/error"
     };
     private static final String[] ADMIN_LIST_URL = {
-            "/news/create",
-            "/news",
+            "/news/**",
             "/token/purge"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
