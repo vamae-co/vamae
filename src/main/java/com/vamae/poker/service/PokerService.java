@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -24,23 +23,17 @@ public class PokerService {
 
     public List<PokerGameSession> findAllNotStarted() {
         return repository.findAll().stream()
-                .filter(session -> Objects.equals(session.getTable().state(), "Waiting"))
+                .filter(session -> Objects.equals(session.getTable().state(), "Waiting players"))
                 .toList();
     }
 
     public CreateResponse create(Settings settings, Principal principal) {
         TableDto table = Poker.create(settings);
 
-        Map<String, String> playersLinks = new HashMap<>();
-        playersLinks.put(
-                table.players().getLast().id(),
-                principal.getName()
-        );
-
         PokerGameSession session = repository.save(
                 PokerGameSession.builder()
                         .table(table)
-                        .playersLinks(playersLinks)
+                        .playersLinks(new HashMap<>())
                         .build()
         );
 

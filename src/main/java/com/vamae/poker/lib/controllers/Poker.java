@@ -7,7 +7,7 @@ import com.vamae.poker.lib.services.mappers.TableMapper;
 
 public class Poker {
     public static TableDto create(Settings settings) {
-        return join(TableMapper.toDto(new Table(settings)));
+        return TableMapper.toDto(new Table(settings));
     }
 
     public static TableDto join(TableDto tableDto) {
