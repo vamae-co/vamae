@@ -1,4 +1,4 @@
-package com.vamae.connect4lib.enums;
+package com.vamae.connect4.lib.enums;
 
 /**
  * Players that can play

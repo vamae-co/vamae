@@ -7,6 +7,7 @@ import com.vamae.authorization.payload.request.RegisterRequest;
 import com.vamae.authorization.payload.response.AuthenticationResponse;
 import com.vamae.authorization.repository.UserRepository;
 import com.vamae.authorization.security.config.JwtService;
+import com.vamae.statistic.service.StatisticService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,6 +37,10 @@ class AuthenticationServiceTest {
     private JwtService jwtService;
     @Mock
     private AuthenticationManager authenticationManager;
+    @Mock
+    private TokenService tokenService;
+    @Mock
+    private StatisticService statisticService;
 
     @InjectMocks
     private AuthenticationService authService;
@@ -61,7 +66,7 @@ class AuthenticationServiceTest {
         verify(authenticationManager, times(1)).authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getUsername(),
-                        authenticationRequest.getPassword()));
+                        authenticationRequest.password()));
     }
 
     @Test
@@ -71,13 +76,21 @@ class AuthenticationServiceTest {
                 .password(PASSWORD + "_wrong")
                 .build();
 
+        when(userRepository.findUserByUsername(anyString()))
+                .thenReturn(Optional.of(
+                                User.builder()
+                                        .username(USERNAME)
+                                        .password(PASSWORD)
+                                        .build()
+                        )
+                );
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new BadCredentialsException("Invalid username or password"));
 
         assertThrows(BadCredentialsException.class, () -> authService.authenticate(authenticationRequest));
 
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
-        verify(userRepository, never()).findUserByUsername(anyString());
+        verify(userRepository, times(1)).findUserByUsername(anyString());
         verify(jwtService, never()).generateToken(any(User.class));
     }
 

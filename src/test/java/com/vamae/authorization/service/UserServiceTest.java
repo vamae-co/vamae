@@ -17,15 +17,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
+    private final static String USERNAME = "testUsername";
+    private static final String INVALID_USERNAME = "invalid_username";
+
     private final static User USER = User.builder()
-            .id("id")
-            .username("testUsername")
+            .username(USERNAME)
             .password("testPassword")
             .balance(1000)
             .build();
-
-    private final static String ID = "id";
-    private static final String INVALID_ID = "invalid_id";
 
     @Mock
     private UserRepository userRepository;
@@ -34,32 +33,45 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void changeBalance() {
-        int offset = 100;
+    void changeBalance_Successful() {
+        int offsetPositive = 100;
+        int offsetNegative = -200;
 
-        when(userRepository.findUserById(ID)).thenReturn(Optional.of(USER));
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.of(USER));
 
-        int result = userService.changeBalance(ID, offset);
+        int resultDepositOperation = userService.changeBalance(USERNAME, offsetPositive);
+        int resultWithdrawOperation = userService.changeBalance(USERNAME, offsetNegative);
 
-        assertEquals(1100, result);
-        verify(userRepository, times(1)).save(USER);
+        assertEquals(1100, resultDepositOperation);
+        assertEquals(900, resultWithdrawOperation);
+        verify(userRepository, times(2)).save(USER);
+    }
+
+    @Test
+    void changeBalance_OffsetGreaterThanBalance() {
+        int offset = -1100;
+
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.of(USER));
+
+        assertThrows(IllegalArgumentException.class, () -> userService.changeBalance(USERNAME, offset));
+        verify(userRepository, times(0)).save(USER);
     }
 
     @Test
     public void findUserById_Positive() {
-        when(userRepository.findUserById(ID)).thenReturn(Optional.of(USER));
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.of(USER));
 
-        User foundUser = userService.findUserById(ID);
+        User foundUser = userService.findUserByUsername(USERNAME);
 
         assertEquals(USER, foundUser);
-        verify(userRepository, times(1)).findUserById(ID);
+        verify(userRepository, times(1)).findUserByUsername(USERNAME);
     }
 
     @Test
     public void findUserById_Negative() {
-        when(userRepository.findUserById(INVALID_ID)).thenReturn(Optional.empty());
+        when(userRepository.findUserByUsername(INVALID_USERNAME)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> userService.findUserById(INVALID_ID));
-        verify(userRepository, times(1)).findUserById(INVALID_ID);
+        assertThrows(NoSuchElementException.class, () -> userService.findUserByUsername(INVALID_USERNAME));
+        verify(userRepository, times(1)).findUserByUsername(INVALID_USERNAME);
     }
 }

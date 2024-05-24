@@ -1,8 +1,8 @@
-package com.vamae.connect4lib.controller;
+package com.vamae.connect4.lib.controller;
 
 import lombok.AllArgsConstructor;
-import com.vamae.connect4lib.enums.Piece;
-import com.vamae.connect4lib.exceptions.PieceOutOfBoardException;
+import com.vamae.connect4.lib.enums.Piece;
+import com.vamae.connect4.lib.exceptions.PieceOutOfBoardException;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ public class Connect4 {
      */
     public boolean move(int x, Piece player) {
         if(gameBoardController.isInBoard(x, 0)) {
-            List<Piece> column = gameBoardController.getGameBoard().getColumns().get(x);
+            List<Piece> column = gameBoardController.getGameBoard().columns().get(x);
 
-            if (column.size() >= gameBoardController.getGameBoard().getRows()) {
+            if (column.size() >= gameBoardController.getGameBoard().rows()) {
                 throw new IllegalArgumentException("That column is full");
             }
 

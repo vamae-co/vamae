@@ -7,10 +7,12 @@ import com.vamae.authorization.payload.request.RegisterRequest;
 import com.vamae.authorization.payload.response.AuthenticationResponse;
 import com.vamae.authorization.repository.UserRepository;
 import com.vamae.authorization.security.config.JwtService;
+import com.vamae.common.exception.UserNotFoundException;
+import com.vamae.statistic.service.StatisticService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +24,23 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final StatisticService statisticService;
+    private final TokenService tokenService;
 
     public AuthenticationResponse register(RegisterRequest request) {
         User user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .username(request.username())
+                .password(passwordEncoder.encode(request.password()))
                 .isActive(true)
                 .role(Role.USER)
+                .balance(1000)
                 .build();
         userRepository.save(user);
 
         String jwtToken = jwtService.generateToken(user);
+        tokenService.createToken(jwtToken, jwtService.extractClaim(jwtToken, Claims::getExpiration));
+
+        statisticService.updateAuthCount(request.username());
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -41,17 +49,24 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        User user = userRepository.findUserByUsername(request.username())
+                .orElseThrow(
+                        () -> new UserNotFoundException(
+                                String.format("User with username %s not found", request.username())
+                        )
+                );
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
+                        request.username(),
+                        request.password()
                 )
         );
 
-        User user = userRepository.findUserByUsername(request.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
         String jwtToken = jwtService.generateToken(user);
+        tokenService.createToken(jwtToken, jwtService.extractClaim(jwtToken, Claims::getExpiration));
+
+        statisticService.updateAuthCount(request.username());
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)

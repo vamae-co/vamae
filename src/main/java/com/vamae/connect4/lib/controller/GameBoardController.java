@@ -1,10 +1,10 @@
-package com.vamae.connect4lib.controller;
+package com.vamae.connect4.lib.controller;
 
+import com.vamae.connect4.lib.entity.GameBoard;
+import com.vamae.connect4.lib.enums.Piece;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import com.vamae.connect4lib.entity.GameBoard;
-import com.vamae.connect4lib.enums.Piece;
-import com.vamae.connect4lib.exceptions.PieceOutOfBoardException;
+import com.vamae.connect4.lib.exceptions.PieceOutOfBoardException;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class GameBoardController {
      * @return coordinates of piece
      */
     public boolean isInBoard(int x, int y) {
-        return (x >= 0 && x < gameBoard.getColumnsCount()) && (y >= 0 && y < gameBoard.getRows());
+        return (x >= 0 && x < gameBoard.getColumnsCount()) && (y >= 0 && y < gameBoard.rows());
     }
 
     /**
@@ -37,7 +37,7 @@ public class GameBoardController {
      */
     public Piece getCell(int x, int y) {
         if (isInBoard(x, y)) {
-            List<Piece> column = gameBoard.getColumns().get(x);
+            List<Piece> column = gameBoard.columns().get(x);
 
             if (column.size() > y) {
                 return column.get(y);

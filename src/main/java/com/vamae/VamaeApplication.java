@@ -1,6 +1,5 @@
 package com.vamae;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -15,7 +14,7 @@ public class VamaeApplication {
 		SpringApplication application = new SpringApplication(VamaeApplication.class);
 
 		Properties properties = new Properties();
-		properties.put("spring.data.mongodb.uri", Dotenv.load().get("MONGODB_URI"));
+		properties.put("spring.data.mongodb.uri", System.getenv("MONGODB_URI"));
 		application.setDefaultProperties(properties);
 
 		application.run(args);

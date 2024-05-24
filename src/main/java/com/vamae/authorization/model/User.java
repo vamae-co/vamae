@@ -4,9 +4,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,9 +24,10 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private String id;
-    @NotEmpty(message = "Username is required")
+    @NotBlank(message = "Username is required")
+    @Indexed(unique = true)
     private String username;
-    @NotEmpty(message = "Password is required")
+    @NotBlank(message = "Password is required")
     private String password;
     private boolean isActive;
     @Enumerated(EnumType.STRING)
