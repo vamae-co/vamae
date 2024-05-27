@@ -2,10 +2,8 @@ package com.vamae.statistic;
 
 import com.vamae.authorization.model.Role;
 import com.vamae.authorization.model.User;
-import com.vamae.authorization.payload.request.AuthenticationRequest;
 import com.vamae.authorization.repository.UserRepository;
 import com.vamae.authorization.security.config.JwtService;
-import com.vamae.authorization.service.TokenService;
 import com.vamae.statistic.model.Statistic;
 import com.vamae.statistic.payload.response.StatisticResponse;
 import com.vamae.statistic.repository.StatisticRepository;
