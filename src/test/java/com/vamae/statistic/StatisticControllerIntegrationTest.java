@@ -3,7 +3,6 @@ package com.vamae.statistic;
 import com.vamae.authorization.model.Role;
 import com.vamae.authorization.model.User;
 import com.vamae.authorization.payload.request.AuthenticationRequest;
-import com.vamae.authorization.payload.request.RegisterRequest;
 import com.vamae.authorization.repository.UserRepository;
 import com.vamae.authorization.security.config.JwtService;
 import com.vamae.authorization.service.TokenService;
@@ -61,18 +60,13 @@ public class StatisticControllerIntegrationTest {
     @MockBean
     private AuthenticationManager authenticationManager;
 
-    @MockBean
-    private TokenService tokenService;
-
     private final String username = "testuser";
     private final String password = "password";
     private final int authCount = 1;
-    private User user;
-    private String testToken = "test_token";
 
     @BeforeEach
     void setUp() {
-        user = User.builder()
+        User user = User.builder()
                 .username(username)
                 .password(password)
                 .isActive(true)
@@ -97,6 +91,7 @@ public class StatisticControllerIntegrationTest {
 
     @Test
     public void testGetStatistic() throws Exception {
+        String testToken = "test_token";
         mockMvc.perform(get("http://localhost:8080/statistic")
                         .param("username", username)
                         .header("Authorization", "Bearer " + testToken)
@@ -108,8 +103,6 @@ public class StatisticControllerIntegrationTest {
 
     @Test
     public void testAuthenticate() throws Exception {
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest(username, password);
-
         mockMvc.perform(post("http://localhost:8080/auth/authenticate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"" + username + "\", \"password\": \"" + password + "\"}"))
