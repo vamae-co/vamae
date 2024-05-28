@@ -1,22 +1,23 @@
 package com.vamae.poker.controller;
 
 import com.vamae.poker.lib.models.records.Settings;
+import com.vamae.poker.model.PokerGameSession;
 import com.vamae.poker.model.requests.GameRequest;
 import com.vamae.poker.model.requests.MoveRequest;
 import com.vamae.poker.model.responses.CreateResponse;
 import com.vamae.poker.model.responses.JoinResponse;
 import com.vamae.poker.model.responses.LobbyResponse;
-import com.vamae.poker.model.PokerGameSession;
-import com.vamae.poker.model.responses.PublicResponse;
-import com.vamae.poker.service.mappers.LobbyMapper;
 import com.vamae.poker.service.PokerService;
+import com.vamae.poker.service.mappers.LobbyMapper;
 import com.vamae.poker.service.mappers.ResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
@@ -44,9 +45,8 @@ public class PokerController {
         return pokerService.create(settings, principal);
     }
 
-    @MessageMapping("/poker/game.join")
-    @SendTo("/topic/poker")
-    public JoinResponse join(
+    @MessageMapping("/game.join")
+    public void join(
             @Payload GameRequest request,
             Principal principal
     ) {
@@ -58,20 +58,23 @@ public class PokerController {
                 .orElseThrow()
                 .getKey();
 
-        return new JoinResponse(newPlayerId);
+        messagingTemplate.convertAndSendToUser(
+                session.getId(),
+                "/queue/private",
+                new JoinResponse(newPlayerId)
+        );
     }
 
-    @MessageMapping("/poker/game.start")
-    @SendTo("/topic/poker")
-    public PublicResponse start(
+    @MessageMapping("/game.start")
+    public void start(
             @Payload GameRequest request
     ) {
         PokerGameSession session = pokerService.start(request.gameId());
 
-        return sendResponses(session);
+        sendResponses(session);
     }
 
-    private PublicResponse sendResponses(PokerGameSession session) {
+    private void sendResponses(PokerGameSession session) {
         session.getTable().players().forEach(
                 player -> messagingTemplate.convertAndSendToUser(
                         session.getPlayersLinks().get(player.id()),
@@ -80,26 +83,28 @@ public class PokerController {
                 )
         );
 
-        return responseMapper.toPublic(session);
+        messagingTemplate.convertAndSendToUser(
+                session.getId(),
+                "/queue/private",
+                responseMapper.toPublic(session)
+        );
     }
 
-    @MessageMapping("/poker/game.move")
-    @SendTo("/topic/poker")
-    public PublicResponse move(
+    @MessageMapping("/game.move")
+    public void move(
             @Payload MoveRequest request
     ) {
         PokerGameSession session = pokerService.move(request);
 
-        return sendResponses(session);
+        sendResponses(session);
     }
 
-    @MessageMapping("/poker/game.end")
-    @SendTo("/topic/poker")
-    public PublicResponse end(
+    @MessageMapping("/game.end")
+    public void end(
             @Payload GameRequest request
     ) {
         PokerGameSession session = pokerService.end(request.gameId());
 
-        return sendResponses(session);
+        sendResponses(session);
     }
 }
