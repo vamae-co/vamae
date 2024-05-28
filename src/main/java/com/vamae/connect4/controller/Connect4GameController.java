@@ -9,7 +9,7 @@ import com.vamae.connect4.entity.Connect4Game;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -20,6 +20,7 @@ import java.util.List;
 public class Connect4GameController {
 
     private final Connect4GameService connect4GameService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping("/connect4/games")
     public List<GameDto> getAllGames() {
@@ -39,20 +40,26 @@ public class Connect4GameController {
         return connect4GameService.init(initializationRequest, principal);
     }
 
-    @MessageMapping("/connect4/game.move")
-    @SendTo("/topic/connect4")
-    public Connect4Game move(
+    @MessageMapping("/connect4.move")
+    public void move(
             @Payload MoveRequest moveRequest
             ) {
-        return connect4GameService.move(moveRequest);
+        simpMessagingTemplate.convertAndSendToUser(
+                moveRequest.gameId(),
+                "/queue/private",
+                connect4GameService.move(moveRequest)
+        );
     }
 
-    @MessageMapping("/connect4/game.join")
-    @SendTo("/topic/connect4")
-    public Connect4Game join(
+    @MessageMapping("/connect4.join")
+    public void join(
             @Payload JoinRequest joinRequest,
             Principal principal
     ) {
-        return connect4GameService.join(joinRequest, principal);
+        simpMessagingTemplate.convertAndSendToUser(
+                joinRequest.gameId(),
+                "/queue/private",
+                connect4GameService.join(joinRequest, principal)
+        );
     }
 }
