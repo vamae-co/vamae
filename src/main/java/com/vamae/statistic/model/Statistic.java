@@ -1,6 +1,5 @@
 package com.vamae.statistic.model;
 
-import com.vamae.authorization.model.User;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
