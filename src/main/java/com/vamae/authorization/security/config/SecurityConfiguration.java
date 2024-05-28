@@ -25,7 +25,8 @@ public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
             "/auth/**",
-            "/error"
+            "/error",
+            "/statistic"
     };
     private static final String[] ADMIN_LIST_URL = {
             "/news/**",
